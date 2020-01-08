@@ -52,8 +52,8 @@
 // Function to generate default point lengths of 20 SVG polys, returned as an array of integers...
 function defaultStarPointLengthsArray(totalPoints, defaultLength) {
   // Set default length if not included in function call...
-  if (totalPoints === undefined || isNaN(totalPoints) == true) var totalPoints = 20; 
-  if (defaultLength === undefined || isNaN(defaultLength) == true) var defaultLength = 200; 
+  if (!totalPoints) var totalPoints = 20; 
+  if (!defaultLength) var defaultLength = 200; 
   var defaultStarPointLengthsArray = [];
   var p = 0;
   for (p = 0; p < totalPoints; p++) {
@@ -65,9 +65,9 @@ function defaultStarPointLengthsArray(totalPoints, defaultLength) {
 // Function to generate random point lengths of 20 SVG polys, returned as an array of integers...
 function randomStarPointLengthsArray(totalPoints, minLength, maxLength) {
   // Set default min & max length if not included in function call...
-  if (totalPoints === undefined || isNaN(totalPoints) == true) var totalPoints = 20; 
-  if (minLength === undefined || isNaN(minLength) == true) var minLength = 33; 
-  if (maxLength === undefined || isNaN(maxLength) == true) var maxLength = 333;
+  if (!totalPoints) var totalPoints = 20; 
+  if (!minLength) var minLength = 33; 
+  if (!maxLength) var maxLength = 333;
   var randomStarPointLengthsArray = [];
   var p = 0;
   for (p = 0; p < totalPoints; p++) {
@@ -76,47 +76,41 @@ function randomStarPointLengthsArray(totalPoints, minLength, maxLength) {
   return randomStarPointLengthsArray;
 };
 
-/*
-// Function to set point lengths of SVG polys in OpenLight.Foundation website logo...
-function setStarPointLengths(totalPoints, pointLengthsArray) {
-  // If totalPoints number is not submitted, substitute with a default...
-  if (totalPoints === undefined || isNaN(totalPoints) == true) var totalPoints = 20;
-  // Var evaluates if array included, and if every value in the included array is a number...
-  var isNumber = false;
-  if (pointLengthsArray !== undefined) {
-    if (pointLengthsArray.every( function(value) { return typeof value === 'number'; } ) == true) {
-        isNumber = true;
-    };
-  };
-  // If pointsArray is not included, or is not an array, call function to generate one...
-  if (pointLengthsArray === undefined || isNumber == false || pointLengthsArray.length != totalPoints) var pointLengthsArray = randomStarPointLengthsArray(totalPoints);
-  var p = 0;
-  for (p = 0; p < totalPoints; p++) {
-    document.getElementById("star-tri-poly-"+p).setAttribute("points", "-1 0 0 " + Number(pointLengthsArray[p]) + " 1 0");
-  };
-};
-*/
-
+// Delay the start of the animation when website index is first loaded...
 function delayStarAnim() {
     setTimeout(animateStarPointLength, 5000);
 };
 
+// Animate the points indefinitely, change timeMS to speed up of slow down animation, and interval to smooth motion, eg. 1k/40=25fps...
 function animateStarPointLength(totalPoints) {
   // If totalPoints number is not submitted, substitute with a default...
-  if (totalPoints === undefined || isNaN(totalPoints) == true) var totalPoints = 20;      
+  if (!totalPoints) var totalPoints = 20;      
 
   var startPointLengthsArray = defaultStarPointLengthsArray(totalPoints);
   var endPointLengthsArray = randomStarPointLengthsArray(totalPoints);
   
   // Variables used for timing/looping/length in stepAnimate function...
-  var timeMS = 1230; // Time between each step...
+  var timeMS = 2000; // Time between each step...
   var timeStart = (new Date()).getTime(); 
   var starPointLength = 0;
   var stepCounter = 0;
+  var stepRandom = Math.floor(Math.random()*10)+5; // Min 5
 
   // Start and interval stepAnimate function, this will loop endlessly unless interrupted by clearInterval call...
   setInterval(stepAnimate, 40);
 
+  // Start/“Pause” the animation if the user doesn’t have the page visible/open (ie. is looking at another tab)...
+  var focused = true;
+  document.addEventListener("visibilitychange", function () {
+    focused = !focused;
+    if (!focused)
+      clearInterval(stepAnimate);
+    if (focused)
+      setInterval(stepAnimate, 50);
+    }
+  );
+
+  // Function to stepAnimate (in-between) random/default shapes...
   function stepAnimate() {
 
       var timeNow = (new Date()).getTime(); 
@@ -132,19 +126,22 @@ function animateStarPointLength(totalPoints) {
       } else {
         // Copy end points to start, and generate new endpoints, for stepAnimate to loop 0-1 timeFraction again with new shapes...
         for (l = 0; l < totalPoints; l++) {
-          startPointLengthsArray[l] = endPointLengthsArray[l];
+            startPointLengthsArray[l] = endPointLengthsArray[l];
+          };
+        // Every random # of shapes, reset shape to default...
+        if (stepCounter == stepRandom) {
+          endPointLengthsArray = defaultStarPointLengthsArray(totalPoints);
+          timeStart = (new Date()).getTime(); 
+          stepRandom = Math.floor(Math.random()*10)+5; // Set new randomNumber
+          stepCounter = 0; // Reset counter...
+        } else {
+          // Otherwise: Keep generating random shapes...
+          endPointLengthsArray = randomStarPointLengthsArray(totalPoints);
+          timeStart = (new Date()).getTime(); 
+          stepCounter++;
         };
-        endPointLengthsArray = randomStarPointLengthsArray(totalPoints);
-        timeStart = (new Date()).getTime(); 
-        stepCounter++;
 
-//        if (stepCounter == 5) {
-//            return clearInterval(stepAnimate);            
-//        };
-        // Reset to defaults... (If end point is set to default, animation will return to starting shape on next step)
-        // for (l = 0; l < totalPoints; l++) {
-        //   document.getElementById("star-tri-poly-" + l).setAttribute("points", "-1 0 0 " + endStarPointLengthsArray[l] + " 1 0");
-        // };
+        // TO DO: Add a button to pause/start animation...?
     };
   };
 };
