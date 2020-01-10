@@ -90,14 +90,14 @@ function animateStarPointLength(totalPoints) {
   var endPointLengthsArray = randomStarPointLengthsArray(totalPoints);
   
   // Variables used for timing/looping/length in stepAnimate function...
-  var timeMS = 2000; // Time between each step...
+  var timeMS = 1200; // Time between each step...
   var timeStart = (new Date()).getTime(); 
   var starPointLength = 0;
   var stepCounter = 0;
   var stepRandom = Math.floor(Math.random()*10)+5; // Min 5
 
   // Start and interval stepAnimate function, this will loop endlessly unless interrupted by clearInterval call...
-  setInterval(stepAnimate, 40);
+  setInterval(stepAnimate, 60);
 
   // Start/“Pause” the animation if the user doesn’t have the page visible/open (ie. is looking at another tab)...
   var focused = true;
