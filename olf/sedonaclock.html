@@ -22,6 +22,10 @@
         left: 50%;
         transform: translate(-50%, -50%);
     }    
+    ignorethis {
+        -webkit-filter: saturate(2) brightness(2) contrast(2) blur(5px); 
+        filter: saturate(2) brightness(2) contrast(2) blur(5px);
+    }
   </style>
   
   <meta http-equiv="refresh" content="54000;url=/24hrClock.html" />
@@ -33,27 +37,34 @@
 <BODY onload='timeRotateClockNeedle();'>
 <svg viewBox="0 0 1000 1000" width="1000" height="1000" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
   <defs>
-    <filter id="gBlurBright" x="0" y="0" color-interpolation-filters="sRGB">
+    <filter id="cc">
       <feComponentTransfer>
-        <feFuncR type="gamma" amplitude="1" exponent="1.8"/>
-        <feFuncG type="gamma" amplitude="1" exponent="1.8"/>
-        <feFuncB type="gamma" amplitude="1" exponent="1.8"/>
-      </feComponentTransfer>
+       <feFuncR type="linear" slope="1.0" intercept="-0.18" />
+       <feFuncG type="linear" slope="1.0" intercept="-0.18" />
+       <feFuncB type="linear" slope="1.0" intercept="-0.18" />
+     </feComponentTransfer>
+      <feColorMatrix
+        type="matrix"
+        values="1.5 0 0 0 0
+                0 1.5 0 0 0
+                0 0 1.5 0 0
+                0 0 0 1 0 "/>
       <feComponentTransfer>
-        <feFuncR type="linear" slope="1"/>
-        <feFuncG type="linear" slope="1"/>
-        <feFuncB type="linear" slope="1"/>
-      </feComponentTransfer>
-      <feComponentTransfer>
-        <feFuncR type="gamma" amplitude="1" exponent=".4545"/>
-        <feFuncG type="gamma" amplitude="1" exponent=".4545"/>
-        <feFuncB type="gamma" amplitude="1" exponent=".4545"/>
-      </feComponentTransfer>     
-    <feGaussianBlur in="SourceGraphic" stdDeviation="0" /> 
+        <feFuncR type="gamma" amplitude="1" exponent="1.42" offset="0.01"/>
+        <feFuncG type="gamma" amplitude="1" exponent="1.42" offset="-0.01"/>
+        <feFuncB type="gamma" amplitude="1" exponent="1.42" offset="0"/>
+      </feComponentTransfer>      
     </filter>
+    
+    <clipPath id="clip-0">
+      <path d="M 1216.913 439.083 C 1216.913 615.814 1073.645 759.083 896.913 759.083 C 720.182 759.083 576.913 615.814 576.913 439.083 C 576.913 262.352 720.182 119.083 896.913 119.083 C 1073.645 119.083 1216.913 262.352 1216.913 439.083 Z" style="stroke-width: 10px; fill: rgb(255, 255, 255); fill-opacity: 0.0;" transform="matrix(0.996195, 0.087156, -0.087156, 0.996195, 41.681776, -76.500517)">
+      <title>Face</title>
+      </path>
+    </clipPath>
+
   </defs>
   <g transform="rotate(-5 800 500) translate(-620 -75) scale(1.25 1.25)">
-    <image x="33" y="0" width="2560" height="1440" xlink:href="https://icons.wunderground.com/webcamramdisk/w/u/WU-77246/1/current.jpg" filter="url(#gBlurBright)">
+    <image filter="url(#cc)" x="33" y="0" width="2560" height="1440" xlink:href="https://icons.wunderground.com/webcamramdisk/w/u/WU-77246/1/current.jpg" style="clip-path: url(#clip-0);">
   </g>
   <g transform="matrix(2, 0, 0, 2, 0, 0)">
     <a xlink:href="https://www.wunderground.com/dashboard/webcam/WU-77246/1">
@@ -61,7 +72,7 @@
       <title>Face</title>
     </path>
     </a>
-    <path d="M 0 0 L 500 0 L 500 500 L 0 500 Z M 250 50 C 139.543 50 50 139.543 50 250 C 50 360.457 139.543 450 250 450 C 360.457 450 450 360.457 450 250 C 450 139.543 360.457 50 250 50 Z" style="fill: rgb(255, 255, 255);">
+    <path d="M 0 0 L 500 0 L 500 500 L 0 500 Z M 250 50 C 139.543 50 50 139.543 50 250 C 50 360.457 139.543 450 250 450 C 360.457 450 450 360.457 450 250 C 450 139.543 360.457 50 250 50 Z" style="fill: rgb(255, 255, 255); opacity: 0;">
       <title>Cutout</title>
     </path>
     <path d="M 167 106.24 C 153.021 82.028 143.444 85.724 127.671 98.237 C 117.595 107.733 114.747 114.747 124.307 124.307 C 115.077 115.077 108.221 117.413 99.251 126.563 C 85.893 143.041 81.515 152.725 106.24 167 C 82.029 153.022 75.582 161.01 68.18 179.732 C 64.201 192.993 65.24 200.493 78.297 203.992 C 65.691 200.615 60.922 206.068 57.728 218.477 C 54.399 239.425 55.451 250 84 250 C 56.043 250 54.455 260.142 57.405 280.059 C 60.591 293.532 65.241 299.506 78.3 296.007 C 65.692 299.385 64.287 306.491 67.725 318.834 C 75.316 338.641 81.515 347.275 106.236 333 C 82.029 346.978 85.723 356.556 98.235 372.327 C 107.732 382.404 114.746 385.254 124.307 375.693 C 115.077 384.923 117.413 391.779 126.563 400.749 C 143.041 414.107 152.725 418.485 167 393.76 C 153.021 417.973 161.011 424.419 179.736 431.822 C 192.996 435.799 200.494 434.758 203.993 421.7 C 200.652 434.17 205.948 438.972 218.07 442.166 C 239.288 445.349 250 443.029 250 405 C 250 442.368 260.343 445.258 280.652 442.452 C 293.707 439.27 299.454 434.566 296.007 421.7 C 299.385 434.308 306.491 435.713 318.834 432.275 C 338.641 424.684 347.275 418.485 333 393.767 C 346.978 417.971 356.556 414.277 372.327 401.765 C 382.404 392.268 385.254 385.254 375.693 375.693 C 384.923 384.923 391.779 382.587 400.749 373.437 C 414.107 356.959 418.485 347.275 393.76 333 C 417.973 346.979 424.419 338.989 431.822 320.264 C 435.799 307.005 434.758 299.507 421.702 296.007 C 434.308 299.386 439.078 293.932 442.272 281.523 C 445.601 260.575 444.549 250 416 250 C 443.957 250 445.545 239.858 442.595 219.941 C 439.409 206.468 434.759 200.494 421.7 203.993 C 434.308 200.615 435.713 193.509 432.275 181.166 C 424.683 161.359 418.485 152.725 393.76 167 C 417.972 153.021 414.276 143.444 401.763 127.671 C 392.267 117.595 385.253 114.747 375.693 124.307 C 384.923 115.077 382.587 108.221 373.437 99.251 C 356.959 85.893 347.275 81.515 333 106.24 C 346.979 82.027 338.989 75.581 320.264 68.178 C 307.004 64.201 299.506 65.242 296.007 78.3 C 299.348 65.83 294.052 61.028 281.93 57.834 C 260.712 54.651 250 56.971 250 95 C 250 57.632 239.657 54.742 219.348 57.548 C 206.293 60.73 200.546 65.434 203.993 78.3 C 200.615 65.692 193.509 64.287 181.166 67.725 C 161.359 75.317 152.725 81.515 167 106.24 Z M 78.3 296.007 C 78.3 296.007 78.3 296.007 78.3 296.007 C 78.3 296.007 78.3 296.007 78.3 296.007 Z M 106.236 333 C 106.237 333 106.237 333 106.237 333 C 106.237 333 106.237 333 106.236 333 Z M 333 393.767 C 333 393.767 333 393.767 333 393.767 C 333 393.767 333 393.767 333 393.767 Z M 421.7 203.993 C 421.7 203.993 421.7 203.993 421.7 203.993 C 421.7 203.993 421.7 203.993 421.7 203.993 Z M 455 250 C 455 363.219 363.219 455 250 455 C 136.781 455 45 363.219 45 250 C 45 136.781 136.781 45 250 45 C 363.219 45 455 136.781 455 250 Z" style="fill: rgb(0,0,0); stroke-width: 0.2pt; stroke: rgb(255,255,255)">
@@ -115,16 +126,23 @@
 function timeRotateClockNeedle() {
   var updateInterval = 1000; // In MS: eg. 1 sec / 50 MS = 20 frames per second animation speed, then 500 frames = 25 seconds duration...    
   var needle = document.getElementById("group-needle-id");
-  // Get today’s date as seconds from UNIX_EPOCH time...
-  var todayStart = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate(),0,0,0).getTime(); 
-  // Get time now as seconds from UNIX_EPOCH time...
-  var todayNow = new Date().getTime();
-  // Evaluate time since midnight today as seconds...
-  var nowSeconds = todayNow-todayStart;
+  // Get today’s date as milliseconds from UNIX_EPOCH time... UTC = Universal Time, not LOCAL...
+  // var todayStart = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate(),0,0,0).getTime(); 
+  var todayUTCStart = new Date(new Date().getUTCFullYear(),new Date().getUTCMonth(),new Date().getUTCDate(),0,0,0).getTime(); 
+  // Get time now as milliseconds from UNIX_EPOCH time... UTC = Universal Time, not LOCAL...
+  // var todayNow = new Date().getTime(); 
+  var todayUTCNow = new Date(new Date().getUTCFullYear(),new Date().getUTCMonth(),new Date().getUTCDate(),new Date().getUTCHours(),new Date().getUTCMinutes(),new Date().getUTCSeconds()).getTime(); 
+  // Evaluate time since midnight today as milliseconds...
+  // var nowMS = todayNow-todayStart;
+  var nowUTCMS = todayUTCNow-todayUTCStart;
+  // Offset UTC time to Phoenix, Mountain Standard Time (-7 hours GMT) = +(7 * 60 * 60) = +25200 seconds (add secs for negative TZ)...
+  var nowUTCMSOffset = nowUTCMS - 25200000; // 25200 ms * 1000 for seconds
   // Evaluate rotation angle of needle to set current time...
-  var nowRotate = (Math.floor((nowSeconds/86400)*360))/1000 ;
+  // var nowRotate = (Math.floor((nowMS/86400)*360))/1000 ;
+  var nowUTCOffsetRotate = (Math.floor((nowUTCMSOffset/86400)*360))/1000 ;
   // Set the needle’s rotation to current time...
-  needle.setAttribute("transform", "rotate(" + nowRotate + " 250 250)");
+  // needle.setAttribute("transform", "rotate(" + nowRotate + " 250 250)");
+  needle.setAttribute("transform", "rotate(" + nowUTCOffsetRotate + " 250 250)");
   // Needle is invisible at start, make visible here... 
   needle.setAttribute("style", "opacity: 1");
   
@@ -145,9 +163,13 @@ function timeRotateClockNeedle() {
   // This functions is called every n secs by setInterval, to update the seconds needle on the clock
   function stepAnimate() {
     todayNow = new Date().getTime();
-    nowSeconds = todayNow-todayStart;
-    nowRotate = (Math.floor((nowSeconds/86400)*360))/1000 ;
-    needle.setAttribute("transform", "rotate(" + nowRotate + " 250 250)");
+    // nowMS = todayNow-todayStart;
+    nowUTCMS = todayUTCNow-todayUTCStart;
+    nowUTCMSOffset = nowUTCMS - 25200000;
+    // nowRotate = (Math.floor((nowMS/86400)*360))/1000 ;
+    nowUTCOffsetRotate = (Math.floor((nowUTCMSOffset/86400)*360))/1000 ;    
+    // needle.setAttribute("transform", "rotate(" + nowRotate + " 250 250)");
+    needle.setAttribute("transform", "rotate(" + nowUTCOffsetRotate + " 250 250)");
   };
     
 };
