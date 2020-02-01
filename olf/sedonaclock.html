@@ -60,14 +60,16 @@
     </clipPath>
 
   </defs>
+  <g transform="matrix(2, 0, 0, 2, 0, 0)">
+    <path id="clock-face-id" d="M 450 250 C 450 360.457 360.457 450 250 450 C 139.543 450 50 360.457 50 250 C 50 139.543 139.543 50 250 50 C 360.457 50 450 139.543 450 250 Z" style="fill: rgb(142, 180, 210); fill-opacity: 1;">
+      <title>Face</title>
+    </path>
+  </g>
   <g transform="rotate(-5 800 500) translate(-620 -75) scale(1.25 1.25)">
     <image id="clock-image-id" filter="url(#cc)" x="33" y="0" width="2560" height="1440" xlink:href="" style="clip-path: url(#clip-0);">
   </g>
   <g transform="matrix(2, 0, 0, 2, 0, 0)">
     <a xlink:href="https://www.wunderground.com/dashboard/webcam/WU-77246/1">
-    <path id="clock-face-id" d="M 450 250 C 450 360.457 360.457 450 250 450 C 139.543 450 50 360.457 50 250 C 50 139.543 139.543 50 250 50 C 360.457 50 450 139.543 450 250 Z" style="fill: rgb(186, 96, 86); fill-opacity: 0.0;">
-      <title>Face</title>
-    </path>
     </a>
     <path d="M 0 0 L 500 0 L 500 500 L 0 500 Z M 250 50 C 139.543 50 50 139.543 50 250 C 50 360.457 139.543 450 250 450 C 360.457 450 450 360.457 450 250 C 450 139.543 360.457 50 250 50 Z" style="fill: rgb(255, 255, 255); opacity: 0;">
       <title>Cutout</title>
@@ -137,7 +139,7 @@ function timeRotateClockNeedle() {
   var todayUTCStart = new Date(new Date().getUTCFullYear(),new Date().getUTCMonth(),new Date().getUTCDate(),0,0,0).getTime(); 
   // Get time now as milliseconds from UNIX_EPOCH time... UTC = Universal Time, not LOCAL...
   // var todayNow = new Date().getTime(); 
-  var todayUTCNow = new Date(new Date().getUTCFullYear(),new Date().getUTCMonth(),new Date().getUTCDate(),new Date().getUTCHours(),new Date().getUTCMinutes(),new Date().getUTCSeconds()).getTime(); 
+  var todayUTCNow = getUTCNow();
   // Evaluate time since midnight today as milliseconds...
   // var nowMS = todayNow-todayStart;
   var nowUTCMS = todayUTCNow-todayUTCStart;
@@ -168,15 +170,16 @@ function timeRotateClockNeedle() {
       clearInterval(stepAnimate);
     if (focused)
       // alert("And we’re back...");
+      updateImageCounter = 0; // RESET THIS IF THE IMAGE SHOULD REFRESH ON BROWSER TAB/WINDOW FOCUS...
       setInterval(stepAnimate, updateInterval);
-      // window.location.reload(false);
+      // window.location.reload(false); // false uses cached content if possible, otherwise true forces reload, default no value...
     }
   );
 
   // This functions is called every n secs by setInterval, to update the seconds needle on the clock
   function stepAnimate() {
     todayNow = new Date().getTime();
-    todayUTCNow = new Date(new Date().getUTCFullYear(),new Date().getUTCMonth(),new Date().getUTCDate(),new Date().getUTCHours(),new Date().getUTCMinutes(),new Date().getUTCSeconds()).getTime(); 
+    todayUTCNow = getUTCNow();
     // nowMS = todayNow-todayStart;
     nowUTCMS = todayUTCNow-todayUTCStart;
     nowUTCMSOffset = nowUTCMS - 25200000;
@@ -201,6 +204,11 @@ function timeRotateClockNeedle() {
   function updateImage() {
     onlineImage = "https://icons.wunderground.com/webcamramdisk/w/u/WU-77246/1/current.jpg\?" + new Date().getTime();
     clockImage.setAttribute("xlink:href", onlineImage);
+  };
+    
+  function getUTCNow() {
+    return new Date(new Date().getUTCFullYear(),new Date().getUTCMonth(),new Date().getUTCDate(),new Date().getUTCHours(),new Date().getUTCMinutes(),new Date().getUTCSeconds()).getTime();
+    // to do: replace var with function...
   };
     
 };
