@@ -14,7 +14,7 @@
   
   <style type="text/css">
     body {
-        background-color: rgb(157, 65, 55);
+        background-color: rgb(252, 232, 162);
     }
     svg {
         display: block;
@@ -34,27 +34,26 @@
 <BODY onload='timeRotateClockNeedle();'>
 <svg viewBox="0 0 1000 1000" width="1000" height="1000" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
   <defs>
-    <filter id="cc">
+     <filter id="gBlurBright" x="0" y="0" color-interpolation-filters="sRGB">
       <feComponentTransfer>
-       <feFuncR type="linear" slope="1.0" intercept="-0.1" />
-       <feFuncG type="linear" slope="1.0" intercept="-0.1" />
-       <feFuncB type="linear" slope="1.0" intercept="-0.1" />
-     </feComponentTransfer>
-      <feColorMatrix
-        type="matrix"
-        values="1.23 0 0 0 0
-                0 1.23 0 0 0
-                0 0 1.23 0 0
-                0 0 0 1 0 "/>
+        <feFuncR type="gamma" amplitude="1" exponent="2.2"/>
+        <feFuncG type="gamma" amplitude="1" exponent="2.2"/>
+        <feFuncB type="gamma" amplitude="1" exponent="2.2"/>
+      </feComponentTransfer>
       <feComponentTransfer>
-        <feFuncR type="gamma" amplitude="1" exponent="1.123" offset="0.01"/>
-        <feFuncG type="gamma" amplitude="1" exponent="1.123" offset="-0.01"/>
-        <feFuncB type="gamma" amplitude="1" exponent="1.123" offset="0"/>
-      </feComponentTransfer>      
+        <feFuncR type="linear" slope="1"/>
+        <feFuncG type="linear" slope="1"/>
+        <feFuncB type="linear" slope="1"/>
+      </feComponentTransfer>
+      <feComponentTransfer>
+        <feFuncR type="gamma" amplitude="1" exponent=".4545"/>
+        <feFuncG type="gamma" amplitude="1" exponent=".4545"/>
+        <feFuncB type="gamma" amplitude="1" exponent=".4545"/>
+      </feComponentTransfer>     
     </filter>
     
     <clipPath id="clip-0">
-      <circle cx="700" cy="710" r="620" style="fill: rgb(255, 255, 255);"></circle>
+      <circle cx="333" cy="396" r="270" style="fill: rgb(255, 255, 255);"></circle>
     </clipPath>
 
   </defs>
@@ -63,11 +62,11 @@
       <title>Face</title>
     </path>
   </g>
-  <g transform="rotate(0 640 360) translate(42 42) scale(0.65 0.65)">
-    <image id="clock-image-id" filter="url(#cc)" x="33" y="0" width="2560" height="1440" xlink:href="" style="clip-path: url(#clip-0);">
+  <g transform="rotate(-1.95 500 500) translate(0 -98) scale(1.5 1.5)">
+    <image x="33" y="0" width="1057" height="735" xlink:href="https://icons.wunderground.com/webcamramdisk/s/a/SaltRun/2/current.jpg" filter="url(#gBlurBright)" style="clip-path: url(#clip-0);">
   </g>
   <g transform="matrix(2, 0, 0, 2, 0, 0)">
-    <a xlink:href="https://www.wunderground.com/dashboard/webcam/TwoSedonaBums/2">
+    <a xlink:href="https://www.wunderground.com/dashboard/webcam/SaltRun/2">
     <path d="M 0 0 L 500 0 L 500 500 L 0 500 Z M 250 50 C 139.543 50 50 139.543 50 250 C 50 360.457 139.543 450 250 450 C 360.457 450 450 360.457 450 250 C 450 139.543 360.457 50 250 50 Z" style="fill: rgb(255, 255, 255); opacity: 0;">
       <title>Cutout</title>
     </path>
@@ -142,7 +141,8 @@ function timeRotateClockNeedle() {
   // var nowMS = todayNow-todayStart;
   var nowUTCMS = todayUTCNow-todayUTCStart;
   // Offset UTC time to Phoenix, Mountain Standard Time (-7 hours GMT) = +(7 * 60 * 60) = +25200 seconds (add secs for negative TZ)...
-  var nowUTCMSOffset = nowUTCMS - 25200000; // 25200 ms * 1000 for seconds
+  // St Augustine = 18000 (EST) -5 GMT
+  var nowUTCMSOffset = nowUTCMS - 18000000; // 18000 ms * 1000 for seconds
   // Evaluate rotation angle of needle to set current time...
   // var nowRotate = (Math.floor((nowMS/86400)*360))/1000 ;
   var nowUTCOffsetRotate = (Math.floor((nowUTCMSOffset/86400)*360))/1000 ;
@@ -154,10 +154,8 @@ function timeRotateClockNeedle() {
   // Variables for updating the clock’s image...
   var clockImage = document.getElementById("clock-image-id");
   // var currentImage = ""; // Set to none, call in update function...
-  var onlineImageURL = "https://icons.wunderground.com/webcamramdisk/t/w/TwoSedonaBums/2/current.jpg"; // TwoSedonaBumsCam2 webcam...
-// For below webcam, use this transform: <g transform="rotate(-5 800 500) translate(-620 -75) scale(1.25 1.25)">
-//  var onlineImageURL = "https://icons.wunderground.com/webcamramdisk/w/u/WU-77246/1/current.jpg"; // Wide panorama, unpredictable...
-  var offlineImage = "sedona-offline.jpg";
+  var onlineImageURL = "https://icons.wunderground.com/webcamramdisk/s/a/SaltRun/2/current.jpg"; // SaltRun’s St Augustine webcam...
+//  var offlineImage = "sedona-offline.jpg";
   var onlineImage = onlineImageURL;
     
   // Start and interval stepAnimate function, this will loop endlessly unless interrupted by clearInterval call...
@@ -183,7 +181,7 @@ function timeRotateClockNeedle() {
     todayUTCNow = getUTCNow();
     // nowMS = todayNow-todayStart;
     nowUTCMS = todayUTCNow-todayUTCStart;
-    nowUTCMSOffset = nowUTCMS - 25200000;
+    nowUTCMSOffset = nowUTCMS - 18000000;
     // nowRotate = (Math.floor((nowMS/86400)*360))/1000 ;
     nowUTCOffsetRotate = (Math.floor((nowUTCMSOffset/86400)*360))/1000 ;    
     // needle.setAttribute("transform", "rotate(" + nowRotate + " 250 250)");
