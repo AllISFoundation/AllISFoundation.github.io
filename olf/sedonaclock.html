@@ -204,7 +204,8 @@ function timeRotateClockNeedle() {
   
   function updateImage() {
     onlineImage = onlineImageURL + "\?" + new Date().getTime();
-    clockImage.setAttribute("xlink:href", onlineImage);
+//    clockImage.setAttribute("xlink:href", offlineImage);
+    clockImage.setAttribute("xlink:href", offlineImage);
   };
     
   function getUTCNow() {
